@@ -229,6 +229,7 @@ $(document).ready(function(){
 
 });
 </script>
+<title>Result-board</title>
 </head>
 
 <body>
