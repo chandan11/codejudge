@@ -232,7 +232,7 @@ p{
 	margin-right:185px;
 }
 </style>
-
+<title>Problem-board</title>
 </head>
 <body>
 	
