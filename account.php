@@ -270,6 +270,8 @@ if($_GET['id'])
 	$result=mysqli_query($con,"SELECT * FROM judge_users WHERE user_name='$user_name'") or die('mysql_error($con)');
     $row=mysqli_fetch_array($result);
     $user_id=$row['user_id'];
+    $name=$row['name'];
+    echo "<b>Name : </b>".$name."<br><br>";
     echo "<b>Username : </b>".$user_name."<br><br><br>";
     //number of problem solved
     //total submissions
@@ -330,9 +332,11 @@ if($_GET['id'])
   	$result=mysqli_query($con,"SELECT DISTINCT contest_id FROM judge_submission WHERE user_id='$user_id'") or die('mysql_error($con)');
   	$num_contest=$result->num_rows;
   	//echo $num_contest;
+  	$c=1;
   	echo "<br><br><b>History Of Participation :</b><br><br>";
   	while($row=mysqli_fetch_array($result))
   	{
+  		$c+=1;
   		//get contest ID
   		$contest_id=$row['contest_id'];
   		//get contest name
@@ -363,6 +367,10 @@ if($_GET['id'])
   			echo "N/A";
   		}
   		echo "<br>";
+  	}
+  	if($c==1)
+  	{
+  		echo "**No any participation yet**<br>";
   	}
 }
 else
