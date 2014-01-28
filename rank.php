@@ -171,6 +171,7 @@ color:black;
 	background-color: #FF3333;
 }
 </style>
+<title>Rank</title>
 </head>
 
 <body>
