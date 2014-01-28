@@ -167,6 +167,7 @@ h3{
 }
 
 </style>
+<title>Contest</title>
 </head>
 <body>
 <?php
