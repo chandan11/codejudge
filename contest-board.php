@@ -228,6 +228,7 @@ color:black;
 	margin-right:185px;
 }
 </style>
+<title>Contest-board</title>
 </head>
 
 <body>
