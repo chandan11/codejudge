@@ -185,6 +185,7 @@ h3{
 	color:#9A9A9A;
 }
 </style>
+<title>Account</title>
 </head>
 <body>
 <?php
