@@ -17,7 +17,7 @@
 		a {color: #9caa6d; text-decoration:none;}
 		a:hover {color: #9caa6d; text-decoration:underline;}
 		</style>
-
+<title>Error</title>
 </head>
 
 <body class="login">
