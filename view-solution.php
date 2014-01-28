@@ -177,7 +177,7 @@ h4{
 	color:red;
 }
 </style>
-
+<title>View-solution</title>
 </head>
 <body>
 	<?php
