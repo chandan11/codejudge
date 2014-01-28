@@ -82,7 +82,7 @@ div.error{
 	font-size:15px;
 }
 </style>
-
+<title>CodeJudge</title>
 </head>
 <body>
 <?php
