@@ -181,6 +181,7 @@ color:black;
 }
 
 </style>
+<title>Submission-board</title>
 </head>
 <body>
 <?php
