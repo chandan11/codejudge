@@ -1,3 +1,41 @@
+<?php
+ob_start();
+session_start();
+include "conn_db.php";
+if((!isset($_SESSION['sess_user_id'])) || (trim($_SESSION['sess_user_id']) == '')) //sess_username or sess_userid not set then redirect to login page.
+{
+	//writing in session for redirecting to the same page after login process.
+	session_regenerate_id();
+	$redirect_url=$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+	$_SESSION['redirect_url'] = $redirect_url;
+	session_write_close();
+	header("Location:/codejudge/");
+	exit();
+}
+//checking for wrong url id--> contest code
+if(isset($_GET['id']))
+{
+	$user_name=$_GET['id'];
+	$result=mysqli_query($con,"SELECT * FROM judge_users WHERE user_name='$user_name'") or die('mysql_error($con)');
+	$count=$result->num_rows;
+	if($count!=1)
+	{
+		header("Location:/codejudge/error.php");
+		exit();	
+	}
+}
+else
+{
+	session_regenerate_id();
+  	$error_msg="You entered a wrong url";
+	$_SESSION['wrong_url'] = $error_msg;
+	session_write_close();
+	flush();
+	header("Location:/codejudge/error.php");
+	exit();	
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -184,61 +222,55 @@ color:black;
 h3{
 	color:#9A9A9A;
 }
+.account a{
+	color:white;
+}
+
 </style>
 <title>Account</title>
 </head>
 <body>
-<?php
-include "conn_db.php";
-ob_start();
-session_start();
-//$name= $_SESSION['sess_username'];
-//echo "yes".$name;
-if((!isset($_SESSION['sess_user_id'])) || (trim($_SESSION['sess_user_id']) == '')) //sess_username or sess_userid not set then redirect to login page.
-{
-	//writing in session for redirecting to the same page after login process.
-	session_regenerate_id();
-	$redirect_url=$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
-	//echo $redirect_url;
-	$_SESSION['redirect_url'] = $redirect_url;
-	session_write_close();
-	header("Location: /codejudge/index.php");
-	exit();
-}
 
-//checking for wrong url
-if(isset($_GET['id']))
-{
-	//check given username is present in DB or not
-	$user_name=$_GET['id'];
-	$result=mysqli_query($con,"SELECT * FROM judge_users WHERE user_name='$user_name'") or die('mysql_error($con)');
-    $row=mysqli_fetch_array($result);
-    $count=$result->num_rows;
-    if($count!=1)
-    {
-  		session_regenerate_id();
-  		$error_msg="You entered a wrong url";
-		$_SESSION['wrong_url'] = $error_msg;
-		session_write_close();
-		header("Location: /codejudge/error.php");
-		exit();	
-    }
-}
-else
-{
-	session_regenerate_id();
-  	$error_msg="You entered a wrong url";
-	$_SESSION['wrong_url'] = $error_msg;
-	session_write_close();
-	header("Location: /codejudge/error.php");
-	exit();	
-}
-?>
+
+<!-- begin olark code -->
+<script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
+f[z]=function(){
+(a.s=a.s||[]).push(arguments)};var a=f[z]._={
+},q=c.methods.length;while(q--){(function(n){f[z][n]=function(){
+f[z]("call",n,arguments)}})(c.methods[q])}a.l=c.loader;a.i=nt;a.p={
+0:+new Date};a.P=function(u){
+a.p[u]=new Date-a.p[0]};function s(){
+a.P(r);f[z](r)}f.addEventListener?f.addEventListener(r,s,false):f.attachEvent("on"+r,s);var ld=function(){function p(hd){
+hd="head";return["<",hd,"></",hd,"><",i,' onl' + 'oad="var d=',g,";d.getElementsByTagName('head')[0].",j,"(d.",h,"('script')).",k,"='",l,"//",a.l,"'",'"',"></",i,">"].join("")}var i="body",m=d[i];if(!m){
+return setTimeout(ld,100)}a.P(1);var j="appendChild",h="createElement",k="src",n=d[h]("div"),v=n[j](d[h](z)),b=d[h]("iframe"),g="document",e="domain",o;n.style.display="none";m.insertBefore(n,m.firstChild).id=z;b.frameBorder="0";b.id=z+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){
+b.src="javascript:false"}b.allowTransparency="true";v[j](b);try{
+b.contentWindow[g].open()}catch(w){
+c[e]=d[e];o="javascript:var d="+g+".open();d.domain='"+d.domain+"';";b[k]=o+"void(0);"}try{
+var t=b.contentWindow[g];t.write(p());t.close()}catch(x){
+b[k]=o+'d.write("'+p().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)};ld()};nt()})({
+loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
+/* custom configuration goes here (www.olark.com/documentation) */
+olark.identify('9700-375-10-2541');/*]]>*/</script><noscript><a href="https://www.olark.com/site/9700-375-10-2541/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
+<!-- end olark code -->
+
+
 <div class="header-cont">
 	<div class="header">
 		<a href="/codejudge/contest.php" class="home">CODE JUDGE</a>
 		<a href="/codejudge/logout.php" class="logout">Logout</a>
-		<a href="/codejudge/account.php" class="account">Account</a>
+		<?php
+		//session_start();
+		if(isset($_SESSION['sess_username'])){
+		$user_name=$_SESSION['sess_username'];
+		echo '<div class="account">';
+		echo '<a href="/codejudge/account.php?id='.$user_name.'">Account</a>';		
+		echo "</div>";
+		}
+		else
+		{
+			header("Location: /codejudge/");
+		}
+		?>
 	</div>
 </div>
 <div class="header-border">
@@ -282,20 +314,16 @@ if($_GET['id'])
     $AC="AC";
     $result=mysqli_query($con,"SELECT * FROM judge_submission WHERE user_id='$user_id' AND result='$AC'") or die('mysql_error($con)');
    	$total_ac=$result->num_rows;
-   	//echo $total_ac;
    	// total wa
    	$WA="WA";
    	$result=mysqli_query($con,"SELECT * FROM judge_submission WHERE user_id='$user_id' AND result='$WA'") or die('mysql_error($con)');
    	$total_wa=$result->num_rows;
-   	//echo $total_wa;
    	$TLE="TLE";
    	$result=mysqli_query($con,"SELECT * FROM judge_submission WHERE user_id='$user_id' AND result='$TLE'") or die('mysql_error($con)');
    	$total_tle=$result->num_rows;
-   	//echo $total_tle;
    	$RTE="RTE";
    	$result=mysqli_query($con,"SELECT * FROM judge_submission WHERE user_id='$user_id' AND result='$RTE'") or die('mysql_error($con)');
    	$total_rte=$result->num_rows;
-   	//echo $total_rte;
    	// number of problem solved
    	$result=mysqli_query($con,"SELECT DISTINCT problem_id FROM judge_submission WHERE user_id='$user_id' AND result='$AC'") or die('mysql_error($con)');
    	$total_prob_solve=$result->num_rows;
